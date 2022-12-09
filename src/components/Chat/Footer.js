@@ -4,7 +4,6 @@ import {
   IconButton,
   InputAdornment,
   Stack,
-  TextField,
   Tooltip,
 } from "@mui/material";
 import {
@@ -17,20 +16,14 @@ import {
   Sticker,
   User,
 } from "phosphor-react";
-import { useTheme, styled } from "@mui/material/styles";
+import { useTheme } from "@mui/material/styles";
 import React from "react";
 import { useSearchParams } from "react-router-dom";
 import useResponsive from "../../hooks/useResponsive";
 
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
-
-const StyledInput = styled(TextField)(({ theme }) => ({
-  "& .MuiInputBase-input": {
-    paddingTop: "12px !important",
-    paddingBottom: "12px !important",
-  },
-}));
+import StyledInput from "../StyledInput";
 
 const Actions = [
   {
