@@ -1,5 +1,6 @@
 import { Box, Stack } from "@mui/material";
 import { ChatHeader, ChatFooter } from "../Chat";
+import Message from "./Message";
 
 const Conversation = () => {
   return (
@@ -7,7 +8,12 @@ const Conversation = () => {
       {/* ChatHeader */}
       <ChatHeader />
       {/* <Msg /> */}
-      <Box width={"100%"} sx={{ flexGrow: 1 }}></Box>
+      <Box
+        width={"100%"}
+        sx={{ flexGrow: 1, height: "100%", overflowY: "scroll" }}
+      >
+        <Message />
+      </Box>
       {/* <ChatFooter /> */}
       <ChatFooter />
     </Stack>
