@@ -1,19 +1,12 @@
-import {
-  Box,
-  IconButton,
-  Stack,
-  useTheme,
-  Divider,
-  Avatar,
-} from "@mui/material";
+import { Box, IconButton, Stack, useTheme, Divider } from "@mui/material";
 import { Gear } from "phosphor-react";
 import { useState } from "react";
 import useSettings from "../../hooks/useSettings";
 
 import Logo from "../../assets/Images/logo.ico";
 import { Nav_Buttons } from "../../data";
-import { faker } from "@faker-js/faker";
 import AntSwitch from "../../components/AntSwitch";
+import ProfileMenu from "./ProfileMenu";
 
 const SideBar = () => {
   const theme = useTheme();
@@ -39,7 +32,6 @@ const SideBar = () => {
         <Stack alignItems="center" spacing={4}>
           <Box
             sx={{
-              // backgroundColor: theme.palette.primary.main,
               height: 64,
               width: 64,
               borderRadius: 1.5,
@@ -120,7 +112,7 @@ const SideBar = () => {
         </Stack>
         <Stack spacing={4}>
           <AntSwitch defaultChecked onChange={onToggleMode} />
-          <Avatar src={faker.image.avatar()} />
+          <ProfileMenu />
         </Stack>
       </Stack>
     </Box>
