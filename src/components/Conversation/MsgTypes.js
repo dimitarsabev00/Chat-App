@@ -3,12 +3,53 @@ import {
   Box,
   Divider,
   IconButton,
+  Menu,
+  MenuItem,
   Stack,
   Typography,
   useTheme,
 } from "@mui/material";
-import { DownloadSimple, Image } from "phosphor-react";
+import { DotsThreeVertical, DownloadSimple, Image } from "phosphor-react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
+import { Message_options } from "../../data";
+const MessageOption = () => {
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  return (
+    <>
+      <DotsThreeVertical
+        size={20}
+        id="basic-button"
+        aria-controls={open ? "basic-menu" : undefined}
+        aria-haspopup="true"
+        aria-expanded={open ? "true" : undefined}
+        onClick={handleClick}
+      />
+      <Menu
+        id="basic-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        MenuListProps={{
+          "aria-labelledby": "basic-button",
+        }}
+      >
+        <Stack spacing={1} px={1}>
+          {Message_options.map((el) => (
+            <MenuItem onClick={handleClose}>{el.title}</MenuItem>
+          ))}
+        </Stack>
+      </Menu>
+    </>
+  );
+};
 
 const Timeline = ({ el }) => {
   const theme = useTheme();
@@ -51,7 +92,7 @@ const MediaMsg = ({ el }) => {
           </Typography>
         </Stack>
       </Box>
-      {/* <MessageOption /> */}
+      <MessageOption />
     </Stack>
   );
 };
@@ -95,7 +136,7 @@ const DocMsg = ({ el }) => {
           </Typography>
         </Stack>
       </Box>
-      {/* <MessageOption /> */}
+      <MessageOption />
     </Stack>
   );
 };
@@ -152,7 +193,7 @@ const LinkMsg = ({ el }) => {
           </Typography>
         </Stack>
       </Box>
-      {/* <MessageOption /> */}
+      <MessageOption />
     </Stack>
   );
 };
@@ -195,7 +236,7 @@ const ReplyMsg = ({ el }) => {
           </Typography>
         </Stack>
       </Box>
-      {/* <MessageOption /> */}
+      <MessageOption />
     </Stack>
   );
 };
@@ -221,7 +262,7 @@ const TextMsg = ({ el }) => {
           {el.message}
         </Typography>
       </Box>
-      {/* <MessageOption /> */}
+      <MessageOption />
     </Stack>
   );
 };
