@@ -98,7 +98,7 @@ const ChatInput = ({ openPicker, setOpenPicker }) => {
             <InputAdornment>
               <IconButton
                 onClick={() => {
-                  setOpenActions(!openActions);
+                  setOpenActions((prev) => !prev);
                 }}
               >
                 <LinkSimple />
