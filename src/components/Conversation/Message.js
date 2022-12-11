@@ -9,7 +9,7 @@ import {
   TextMsg,
   Timeline,
 } from "./MsgTypes";
-const Message = () => {
+const Message = ({ menu }) => {
   return (
     <Box p={3}>
       <Stack spacing={3}>
@@ -26,30 +26,30 @@ const Message = () => {
                 case "img":
                   return (
                     // Media Message
-                    <MediaMsg el={el} />
+                    <MediaMsg el={el} menu={menu} />
                   );
 
                 case "doc":
                   return (
                     // Doc Message
-                    <DocMsg el={el} />
+                    <DocMsg el={el} menu={menu} />
                   );
                 case "link":
                   return (
                     //  Link Message
-                    <LinkMsg el={el} />
+                    <LinkMsg el={el} menu={menu} />
                   );
 
                 case "reply":
                   return (
                     //  ReplyMessage
-                    <ReplyMsg el={el} />
+                    <ReplyMsg el={el} menu={menu} />
                   );
 
                 default:
                   return (
                     // Text Message
-                    <TextMsg el={el} />
+                    <TextMsg el={el} menu={menu} />
                   );
               }
 
