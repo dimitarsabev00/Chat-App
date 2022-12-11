@@ -13,9 +13,10 @@ import {
 import { useTheme } from "@mui/material/styles";
 import { CaretDown, MagnifyingGlass, Phone, VideoCamera } from "phosphor-react";
 import { faker } from "@faker-js/faker";
-import { useSearchParams } from "react-router-dom";
 import useResponsive from "../../hooks/useResponsive";
 import StyledBadge from "../StyledBadge";
+import { ToggleSidebar } from "../../redux/slices/app";
+import { useDispatch } from "react-redux";
 
 const Conversation_Menu = [
   {
@@ -33,8 +34,8 @@ const Conversation_Menu = [
 ];
 
 const Header = () => {
+  const dispatch = useDispatch();
   const isMobile = useResponsive("between", "md", "xs", "sm");
-  const [searchParams, setSearchParams] = useSearchParams();
   const theme = useTheme();
 
   const [conversationMenuAnchorEl, setConversationMenuAnchorEl] =
@@ -65,8 +66,7 @@ const Header = () => {
       >
         <Stack
           onClick={() => {
-            searchParams.set("open", true);
-            setSearchParams(searchParams);
+            dispatch(ToggleSidebar());
           }}
           spacing={2}
           direction="row"
