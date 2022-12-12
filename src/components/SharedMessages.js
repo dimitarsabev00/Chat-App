@@ -1,4 +1,3 @@
-import React from "react";
 import { useTheme } from "@mui/material/styles";
 import {
   Box,
@@ -12,10 +11,12 @@ import {
 import { ArrowLeft } from "phosphor-react";
 import useResponsive from "../hooks/useResponsive";
 import { useDispatch } from "react-redux";
-import { ToggleSidebar, UpdateSidebarType } from "../redux/slices/app";
+import { UpdateSidebarType } from "../redux/slices/app";
 import { faker } from "@faker-js/faker";
-import { DocMsg, LinkMsg } from "./Conversation/MsgTypes";
+
 import { Shared_docs, Shared_links } from "../data";
+import { DocMsg, LinkMsg } from "../components/Conversation/MsgTypes";
+import { useState } from "react";
 
 const Media = () => {
   const dispatch = useDispatch();
@@ -24,7 +25,7 @@ const Media = () => {
 
   const isDesktop = useResponsive("up", "md");
 
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useState(0);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -70,7 +71,7 @@ const Media = () => {
             height: "100%",
             position: "relative",
             flexGrow: 1,
-            overflow: "scroll",
+            overflowY: "scroll",
           }}
           spacing={3}
           padding={value === 1 ? 1 : 3}

@@ -1,102 +1,26 @@
-import { faker } from "@faker-js/faker";
+import React from "react";
 import {
-  alpha,
-  Avatar,
-  Badge,
   Box,
   Button,
   Divider,
   IconButton,
-  InputBase,
   Stack,
-  styled,
   Typography,
-  useTheme,
+  InputBase,
 } from "@mui/material";
-import { ArchiveBox, CircleDashed, MagnifyingGlass } from "phosphor-react";
+import { ArchiveBox, MagnifyingGlass, UserCirclePlus } from "phosphor-react";
 import { SimpleBarStyle } from "../../components/Scrollbar";
+import { useTheme, styled, alpha } from "@mui/material/styles";
+import { Link } from "react-router-dom";
+import useResponsive from "../../hooks/useResponsive";
+import MobileBottomNav from "../../layouts/MobileBottomNav";
 import { ChatList } from "../../data";
+import ChatElement from "../../components/ChatElement";
 
-const StyledBadge = styled(Badge)(({ theme }) => ({
-  "& .MuiBadge-badge": {
-    backgroundColor: "#44b700",
-    color: "#44b700",
-    boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
-    "&::after": {
-      position: "absolute",
-      top: 0,
-      left: 0,
-      width: "100%",
-      height: "100%",
-      borderRadius: "50%",
-      animation: "ripple 1.2s infinite ease-in-out",
-      border: "1px solid currentColor",
-      content: '""',
-    },
-  },
-  "@keyframes ripple": {
-    "0%": {
-      transform: "scale(.8)",
-      opacity: 1,
-    },
-    "100%": {
-      transform: "scale(2.4)",
-      opacity: 0,
-    },
-  },
-}));
-
-const ChatElement = ({ img, name, msg, time, unread, online, id }) => {
-  const theme = useTheme();
-  return (
-    <Box
-      sx={{
-        width: "100%",
-        borderRadius: 1,
-        backgroundColor:
-          theme.palette.mode === "light"
-            ? "#FFF"
-            : theme.palette.background.default,
-      }}
-      p={2}
-    >
-      <Stack direction="row" alignItems="center" justifyContent="space-between">
-        <Stack direction="row" spacing={2}>
-          {online ? (
-            <StyledBadge
-              overlap="circular"
-              anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-              variant="dot"
-            >
-              <Avatar src={faker.image.avatar()} />
-            </StyledBadge>
-          ) : (
-            <Avatar src={faker.image.avatar()} />
-          )}
-
-          <Stack spacing={0.3}>
-            <Typography variant="subtitle2">{name}</Typography>
-            <Typography variant="caption">{msg}</Typography>
-          </Stack>
-        </Stack>
-        <Stack spacing={2} alignItems={"center"}>
-          <Typography sx={{ fontWeight: 600 }} variant="caption">
-            {time}
-          </Typography>
-          <Badge
-            className="unread-count"
-            color="primary"
-            badgeContent={unread}
-          />
-        </Stack>
-      </Stack>
-    </Box>
-  );
-};
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: 20,
-  backgroundColor: alpha(theme.palette.background.default, 1),
+  backgroundColor: alpha(theme.palette.background.paper, 1),
   marginRight: theme.spacing(2),
   marginLeft: 0,
   width: "100%",
@@ -116,33 +40,46 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: "inherit",
   "& .MuiInputBase-input": {
     padding: theme.spacing(1, 1, 1, 0),
+    // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     width: "100%",
   },
 }));
+
 const Chats = () => {
   const theme = useTheme();
+  const isDesktop = useResponsive("up", "md");
+
   return (
     <Box
       sx={{
         position: "relative",
-        width: 320,
+        height: "100%",
+        width: isDesktop ? 320 : "100vw",
         backgroundColor:
-          theme.palette.mode === "light"
-            ? "#F8FAFF"
-            : theme.palette.background.paper,
-        boxShadow: "0px 0px 2px rgba(0, 0, 0,0.25)",
+          theme.palette.mode === "light" ? "#F8FAFF" : theme.palette.background,
+
+        boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.25)",
       }}
     >
-      <Stack p={3} spacing={2} sx={{ height: "100vh" }}>
+      {!isDesktop && (
+        // Mobile Bottom Nav
+        <MobileBottomNav />
+      )}
+
+      <Stack p={3} spacing={2} sx={{ maxHeight: "100vh" }}>
         <Stack
-          direction="row"
-          alignItems="center"
+          alignItems={"center"}
           justifyContent="space-between"
+          direction="row"
         >
           <Typography variant="h5">Chats</Typography>
-          <IconButton>
-            <CircleDashed />
+          <IconButton
+            component={Link}
+            to="/app"
+            sx={{ width: "max-content", color: theme.palette.primary.main }}
+          >
+            <UserCirclePlus />
           </IconButton>
         </Stack>
         <Stack sx={{ width: "100%" }}>
@@ -150,42 +87,33 @@ const Chats = () => {
             <SearchIconWrapper>
               <MagnifyingGlass color="#709CE6" />
             </SearchIconWrapper>
-            <StyledInputBase placeholder="Search.." />
+            <StyledInputBase
+              placeholder="Search…"
+              inputProps={{ "aria-label": "search" }}
+            />
           </Search>
         </Stack>
-        <Stack spacing={2}>
-          <Stack direction="row" alignItems="center" spacing={1.5}>
+        <Stack spacing={1}>
+          <Stack direction={"row"} spacing={1.5} alignItems="center">
             <ArchiveBox size={24} />
-            <Button>Archive</Button>
+            <Button variant="text">Archive</Button>
           </Stack>
           <Divider />
         </Stack>
-        <Stack
-          spacing={2}
-          direction="column"
-          sx={{
-            flexGrow: 1,
-            overflowY: "scroll",
-            height: "100%",
-          }}
-        >
+        <Stack sx={{ flexGrow: 1, overflow: "scroll", height: "100%" }}>
           <SimpleBarStyle timeout={500} clickOnTrack={false}>
             <Stack spacing={2.4}>
               <Typography variant="subtitle2" sx={{ color: "#676667" }}>
                 Pinned
               </Typography>
-
-              {/* Chat List */}
-              {ChatList.filter((el) => el.pinned).map((el, index) => {
+              {/* Pinned Chats List */}
+              {ChatList.filter((el) => el.pinned).map((el, idx) => {
                 return <ChatElement {...el} />;
               })}
-            </Stack>
-            <Stack spacing={2.4}>
               <Typography variant="subtitle2" sx={{ color: "#676667" }}>
                 All Chats
               </Typography>
-
-              {/* Chat List */}
+              {/* All Chats List */}
               {ChatList.filter((el) => !el.pinned).map((el, idx) => {
                 return <ChatElement {...el} />;
               })}

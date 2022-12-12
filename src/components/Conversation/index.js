@@ -1,23 +1,65 @@
-import { Box, Stack } from "@mui/material";
-import { ChatHeader, ChatFooter } from "../Chat";
-import Message from "./Message";
+import { Stack, Box } from "@mui/material";
+import { Chat_History } from "../../data";
+import {
+  DocMsg,
+  LinkMsg,
+  MediaMsg,
+  ReplyMsg,
+  TextMsg,
+  Timeline,
+} from "./MsgTypes";
 
-const Conversation = () => {
+const Conversation = ({ isMobile }) => {
   return (
-    <Stack height={"100%"} maxHeight={"100vh"} width={"auto"}>
-      {/* ChatHeader */}
-      <ChatHeader />
-      {/* <Msg /> */}
-      <Box
-        width={"100%"}
-        sx={{ flexGrow: 1, height: "100%", overflowY: "scroll" }}
-      >
-        <Message menu={true} />
-      </Box>
-      {/* <ChatFooter /> */}
-      <ChatFooter />
-    </Stack>
+    <Box p={isMobile ? 1 : 3}>
+      <Stack spacing={3}>
+        {Chat_History.map((el, idx) => {
+          switch (el.type) {
+            case "divider":
+              return (
+                // Timeline
+                <Timeline el={el} />
+              );
+
+            case "msg":
+              switch (el.subtype) {
+                case "img":
+                  return (
+                    // Media Message
+                    <MediaMsg el={el} />
+                  );
+
+                case "doc":
+                  return (
+                    // Doc Message
+                    <DocMsg el={el} />
+                  );
+                case "link":
+                  return (
+                    //  Link Message
+                    <LinkMsg el={el} />
+                  );
+
+                case "reply":
+                  return (
+                    //  ReplyMessage
+                    <ReplyMsg el={el} />
+                  );
+
+                default:
+                  return (
+                    // Text Message
+                    <TextMsg el={el} />
+                  );
+              }
+
+            default:
+              return <></>;
+          }
+        })}
+      </Stack>
+    </Box>
   );
 };
 
-export default Conversation;
+export { Conversation };

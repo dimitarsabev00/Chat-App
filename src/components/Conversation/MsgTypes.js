@@ -1,69 +1,38 @@
-import {
-  alpha,
-  Box,
-  Divider,
-  IconButton,
-  Menu,
-  MenuItem,
-  Stack,
-  Typography,
-  useTheme,
-} from "@mui/material";
-import { DotsThreeVertical, DownloadSimple, Image } from "phosphor-react";
-import { useState } from "react";
+import React from "react";
+import { Stack, Box, Typography, IconButton, Divider } from "@mui/material";
+import { useTheme, alpha } from "@mui/material/styles";
+import { DownloadSimple, Image } from "phosphor-react";
 import { Link } from "react-router-dom";
-import { Message_options } from "../../data";
-const MessageOption = () => {
-  const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-  return (
-    <>
-      <DotsThreeVertical
-        size={20}
-        id="basic-button"
-        aria-controls={open ? "basic-menu" : undefined}
-        aria-haspopup="true"
-        aria-expanded={open ? "true" : undefined}
-        onClick={handleClick}
-      />
-      <Menu
-        id="basic-menu"
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        MenuListProps={{
-          "aria-labelledby": "basic-button",
-        }}
-      >
-        <Stack spacing={1} px={1}>
-          {Message_options.map((el) => (
-            <MenuItem onClick={handleClose}>{el.title}</MenuItem>
-          ))}
-        </Stack>
-      </Menu>
-    </>
-  );
-};
+import truncateString from "../../utils/truncate";
+import MessageOptions from "./MessageOptions";
 
-const Timeline = ({ el }) => {
+const TextMsg = ({ el }) => {
   const theme = useTheme();
   return (
-    <Stack direction="row" alignItems={"center"} justifyContent="space-between">
-      <Divider width="46%" />
-      <Typography variant="caption" sx={{ color: theme.palette.text }}>
-        {el.text}
-      </Typography>
-      <Divider width="46%" />
+    <Stack direction="row" justifyContent={el.incoming ? "start" : "end"}>
+      <Box
+        px={1.5}
+        py={1.5}
+        sx={{
+          backgroundColor: el.incoming
+            ? alpha(theme.palette.background.default, 1)
+            : theme.palette.primary.main,
+          borderRadius: 1.5,
+          width: "max-content",
+        }}
+      >
+        <Typography
+          variant="body2"
+          color={el.incoming ? theme.palette.text : "#fff"}
+        >
+          {el.message}
+        </Typography>
+      </Box>
+      <MessageOptions />
     </Stack>
   );
 };
-const MediaMsg = ({ el, menu }) => {
+const MediaMsg = ({ el }) => {
   const theme = useTheme();
   return (
     <Stack direction="row" justifyContent={el.incoming ? "start" : "end"}>
@@ -92,11 +61,11 @@ const MediaMsg = ({ el, menu }) => {
           </Typography>
         </Stack>
       </Box>
-      {menu && <MessageOption />}
+      <MessageOptions />
     </Stack>
   );
 };
-const DocMsg = ({ el, menu }) => {
+const DocMsg = ({ el }) => {
   const theme = useTheme();
   return (
     <Stack direction="row" justifyContent={el.incoming ? "start" : "end"}>
@@ -136,11 +105,11 @@ const DocMsg = ({ el, menu }) => {
           </Typography>
         </Stack>
       </Box>
-      {menu && <MessageOption />}
+      <MessageOptions />
     </Stack>
   );
 };
-const LinkMsg = ({ el, menu }) => {
+const LinkMsg = ({ el }) => {
   const theme = useTheme();
   return (
     <Stack direction="row" justifyContent={el.incoming ? "start" : "end"}>
@@ -173,7 +142,7 @@ const LinkMsg = ({ el, menu }) => {
             />
             <Stack direction={"column"} spacing={2}>
               <Typography variant="subtitle2" textAlign={"start"}>
-                Creating Chat App with ReactJS
+                Creating Chat App using MERN
               </Typography>
               <Typography
                 component={Link}
@@ -181,7 +150,7 @@ const LinkMsg = ({ el, menu }) => {
                 variant="subtitle2"
                 sx={{ color: theme.palette.primary.main }}
               >
-                "www.youtube.com/watch/v12uqywHTY2"
+                {truncateString("www.youtube.com/watch/v12uqywHTY2", 16)}
               </Typography>
             </Stack>
           </Stack>
@@ -193,11 +162,11 @@ const LinkMsg = ({ el, menu }) => {
           </Typography>
         </Stack>
       </Box>
-      {menu && <MessageOption />}
+      <MessageOptions />
     </Stack>
   );
 };
-const ReplyMsg = ({ el, menu }) => {
+const ReplyMsg = ({ el }) => {
   const theme = useTheme();
   return (
     <Stack direction="row" justifyContent={el.incoming ? "start" : "end"}>
@@ -236,34 +205,21 @@ const ReplyMsg = ({ el, menu }) => {
           </Typography>
         </Stack>
       </Box>
-      {menu && <MessageOption />}
+      <MessageOptions />
     </Stack>
   );
 };
-const TextMsg = ({ el, menu }) => {
+const Timeline = ({ el }) => {
   const theme = useTheme();
   return (
-    <Stack direction="row" justifyContent={el.incoming ? "start" : "end"}>
-      <Box
-        px={1.5}
-        py={1.5}
-        sx={{
-          backgroundColor: el.incoming
-            ? alpha(theme.palette.background.default, 1)
-            : theme.palette.primary.main,
-          borderRadius: 1.5,
-          width: "max-content",
-        }}
-      >
-        <Typography
-          variant="body2"
-          color={el.incoming ? theme.palette.text : "#fff"}
-        >
-          {el.message}
-        </Typography>
-      </Box>
-      {menu && <MessageOption />}
+    <Stack direction="row" alignItems={"center"} justifyContent="space-between">
+      <Divider width="46%" />
+      <Typography variant="caption" sx={{ color: theme.palette.text }}>
+        {el.text}
+      </Typography>
+      <Divider width="46%" />
     </Stack>
   );
 };
+
 export { Timeline, MediaMsg, LinkMsg, DocMsg, TextMsg, ReplyMsg };

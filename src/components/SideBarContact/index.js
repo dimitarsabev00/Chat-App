@@ -4,14 +4,8 @@ import {
   Avatar,
   Box,
   Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
   Divider,
   IconButton,
-  Slide,
   Stack,
   Typography,
 } from "@mui/material";
@@ -21,62 +15,18 @@ import {
   CaretRight,
   Phone,
   Prohibit,
-  Star,
   Trash,
   VideoCamera,
   X,
 } from "phosphor-react";
-import AntSwitch from "./AntSwitch";
+import useResponsive from "../../hooks/useResponsive";
+import AntSwitch from "../AntSwitch";
 import { useDispatch } from "react-redux";
-import { ToggleSidebar, UpdateSidebarType } from "../redux/slices/app";
-const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
-const BlockDialog = ({ open, handleClose }) => {
-  return (
-    <Dialog
-      open={open}
-      TransitionComponent={Transition}
-      keepMounted
-      onClose={handleClose}
-      aria-describedby="alert-dialog-slide-description"
-    >
-      <DialogTitle>Block this contact</DialogTitle>
-      <DialogContent>
-        <DialogContentText id="alert-dialog-slide-description">
-          Are you sure you want to block this Contact?
-        </DialogContentText>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={handleClose}>Yes</Button>
-      </DialogActions>
-    </Dialog>
-  );
-};
-const DeleteDialog = ({ open, handleClose }) => {
-  return (
-    <Dialog
-      open={open}
-      TransitionComponent={Transition}
-      keepMounted
-      onClose={handleClose}
-      aria-describedby="alert-dialog-slide-description"
-    >
-      <DialogTitle>Delete this chat</DialogTitle>
-      <DialogContent>
-        <DialogContentText id="alert-dialog-slide-description">
-          Are you sure you want to delete this chat?
-        </DialogContentText>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={handleClose}>Yes</Button>
-      </DialogActions>
-    </Dialog>
-  );
-};
-const Contact = () => {
+import { ToggleSidebar, UpdateSidebarType } from "../../redux/slices/app";
+import BlockDialog from "./BlockDialog";
+import DeleteDialog from "./DeleteDialog";
+
+const SideBarContact = () => {
   const [openBlock, setOpenBlock] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
   const handleCloseBlock = () => {
@@ -89,8 +39,10 @@ const Contact = () => {
 
   const theme = useTheme();
 
+  const isDesktop = useResponsive("up", "md");
+
   return (
-    <Box sx={{ width: 320, maxHeight: "100vh" }}>
+    <Box sx={{ width: !isDesktop ? "100vw" : 320, maxHeight: "100vh" }}>
       <Stack sx={{ height: "100%" }}>
         <Box
           sx={{
@@ -196,25 +148,7 @@ const Contact = () => {
               </Box>
             ))}
           </Stack>
-          <Divider />
-          <Stack
-            direction="row"
-            alignItems="center"
-            justifyContent={"space-between"}
-          >
-            <Stack direction="row" alignItems="center" spacing={2}>
-              <Star size={21} />
-              <Typography variant="subtitle2">Starred Messages</Typography>
-            </Stack>
 
-            <IconButton
-              onClick={() => {
-                dispatch(UpdateSidebarType("STARRED"));
-              }}
-            >
-              <CaretRight />
-            </IconButton>
-          </Stack>
           <Divider />
           <Stack
             direction="row"
@@ -274,4 +208,4 @@ const Contact = () => {
   );
 };
 
-export default Contact;
+export default SideBarContact;

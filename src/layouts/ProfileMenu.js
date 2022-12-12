@@ -1,12 +1,26 @@
+import React from "react";
 import { Avatar, Box, Fade, Menu, MenuItem, Stack } from "@mui/material";
 
 import { faker } from "@faker-js/faker";
+import { Gear, SignOut, User } from "phosphor-react";
 
-import { Profile_Menu } from "../../data";
-import { useState } from "react";
+const Profile_Menu = [
+  {
+    title: "Profile",
+    icon: <User />,
+  },
+  {
+    title: "Settings",
+    icon: <Gear />,
+  },
+  {
+    title: "Logout",
+    icon: <SignOut />,
+  },
+];
 
 const ProfileMenu = () => {
-  const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorEl, setAnchorEl] = React.useState(null);
   const openMenu = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);

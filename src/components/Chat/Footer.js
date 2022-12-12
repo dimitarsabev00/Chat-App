@@ -4,6 +4,7 @@ import {
   IconButton,
   InputAdornment,
   Stack,
+  TextField,
   Tooltip,
 } from "@mui/material";
 import {
@@ -16,14 +17,21 @@ import {
   Sticker,
   User,
 } from "phosphor-react";
-import { useTheme } from "@mui/material/styles";
+import { useTheme, styled } from "@mui/material/styles";
 import React from "react";
-import { useSearchParams } from "react-router-dom";
 import useResponsive from "../../hooks/useResponsive";
 
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
-import StyledInput from "../StyledInput";
+import { useSelector } from "react-redux";
+import { useState } from "react";
+
+const StyledSendMsgInput = styled(TextField)(({ theme }) => ({
+  "& .MuiInputBase-input": {
+    paddingTop: "12px !important",
+    paddingBottom: "12px !important",
+  },
+}));
 
 const Actions = [
   {
@@ -59,10 +67,9 @@ const Actions = [
 ];
 
 const ChatInput = ({ openPicker, setOpenPicker }) => {
-  const [openActions, setOpenActions] = React.useState(false);
-
+  const [openActions, setOpenActions] = useState(false);
   return (
-    <StyledInput
+    <StyledSendMsgInput
       fullWidth
       placeholder="Write a message..."
       variant="filled"
@@ -98,7 +105,7 @@ const ChatInput = ({ openPicker, setOpenPicker }) => {
             <InputAdornment>
               <IconButton
                 onClick={() => {
-                  setOpenActions((prev) => !prev);
+                  setOpenActions(!openActions);
                 }}
               >
                 <LinkSimple />
@@ -129,7 +136,7 @@ const Footer = () => {
 
   const isMobile = useResponsive("between", "md", "xs", "sm");
 
-  const [searchParams] = useSearchParams();
+  const { sideBar } = useSelector((state) => state.app);
 
   const [openPicker, setOpenPicker] = React.useState(false);
   return (
@@ -158,20 +165,17 @@ const Footer = () => {
                 position: "fixed",
                 display: openPicker ? "inline" : "none",
                 bottom: 81,
-                right: isMobile
-                  ? 20
-                  : searchParams.get("open") === "true"
-                  ? 420
-                  : 100,
+                right: isMobile ? 20 : sideBar.open ? 420 : 100,
               }}
             >
               <Picker
                 theme={theme.palette.mode}
                 data={data}
-                onEmojiSelect={console.log}
+                onEmojiSelect={(e) => {
+                  console.log(e);
+                }}
               />
             </Box>
-            {/* Chat Input */}
             <ChatInput openPicker={openPicker} setOpenPicker={setOpenPicker} />
           </Stack>
           <Box

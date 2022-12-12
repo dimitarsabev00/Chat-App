@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Avatar,
   Box,
@@ -14,9 +13,10 @@ import { useTheme } from "@mui/material/styles";
 import { CaretDown, MagnifyingGlass, Phone, VideoCamera } from "phosphor-react";
 import { faker } from "@faker-js/faker";
 import useResponsive from "../../hooks/useResponsive";
-import StyledBadge from "../StyledBadge";
 import { ToggleSidebar } from "../../redux/slices/app";
 import { useDispatch } from "react-redux";
+import StyledBadge from "../StyledBadge";
+import { useState } from "react";
 
 const Conversation_Menu = [
   {
@@ -33,13 +33,13 @@ const Conversation_Menu = [
   },
 ];
 
-const Header = () => {
+const ChatHeader = () => {
   const dispatch = useDispatch();
   const isMobile = useResponsive("between", "md", "xs", "sm");
   const theme = useTheme();
 
   const [conversationMenuAnchorEl, setConversationMenuAnchorEl] =
-    React.useState(null);
+    useState(null);
   const openConversationMenu = Boolean(conversationMenuAnchorEl);
   const handleClickConversationMenu = (event) => {
     setConversationMenuAnchorEl(event.currentTarget);
@@ -155,4 +155,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default ChatHeader;
