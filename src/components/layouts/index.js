@@ -1,7 +1,7 @@
 import { Stack } from "@mui/material";
 import React from "react";
 import { Outlet } from "react-router-dom";
-import useResponsive from "../hooks/useResponsive";
+import useResponsive from "../../hooks/useResponsive";
 import SideBar from "./SideBar";
 
 const Layout = () => {

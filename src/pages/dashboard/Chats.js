@@ -13,7 +13,7 @@ import { SimpleBarStyle } from "../../components/Scrollbar";
 import { useTheme, styled, alpha } from "@mui/material/styles";
 import { Link } from "react-router-dom";
 import useResponsive from "../../hooks/useResponsive";
-import MobileBottomNav from "../../layouts/MobileBottomNav";
+import MobileBottomNav from "../../components/layouts/MobileBottomNav";
 import { ChatList } from "../../data";
 import ChatElement from "../../components/ChatElement";
 

@@ -2,7 +2,7 @@ import React from "react";
 import { useTheme } from "@mui/material/styles";
 import { Box, IconButton, Stack } from "@mui/material";
 import ProfileMenu from "./ProfileMenu";
-import { Nav_Buttons } from "../data";
+import { Nav_Buttons } from "../../data";
 
 const MobileBottomNav = () => {
   const theme = useTheme();

@@ -2,7 +2,7 @@ import { Suspense, lazy } from "react";
 import { Navigate, useRoutes } from "react-router-dom";
 
 // layouts
-import Layout from "../layouts";
+import Layout from "../components/layouts";
 
 // config
 import { DEFAULT_PATH } from "../config";
