@@ -1,4 +1,4 @@
-import { Box, Button, TextField, Typography } from "@mui/material";
+import { Box, Button, InputLabel, TextField, Typography } from "@mui/material";
 import { Image } from "phosphor-react";
 import { Link } from "react-router-dom";
 const Register = () => {
@@ -27,18 +27,20 @@ const Register = () => {
         <TextField type="email" placeholder="email" />
         <TextField type="password" placeholder="password" />
         <TextField sx={{ display: "none" }} type="file" id="file" />
-        <label
+        <InputLabel
           htmlFor="file"
           style={{ display: "flex", alignItems: "center", gap: "5px" }}
         >
           <Image size={40} />
-          <span>Add an avatar</span>
-        </label>
+          <Box>Add an avatar</Box>
+        </InputLabel>
         <Button variant="contained">Sign Up</Button>
       </form>
       <Typography>
-        You do have an account?
-        <Link to="/login">Login</Link>
+        You do have an account?{" "}
+        <Link to="/login" style={{ textDecoration: "none", color: "#0162C4" }}>
+          Login
+        </Link>
       </Typography>
     </Box>
   );

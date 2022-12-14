@@ -28,8 +28,13 @@ const Login = () => {
         <Button variant="contained">Sign In</Button>
       </form>
       <Typography>
-        You do have an account?
-        <Link to="/register">Register</Link>
+        You do have an account?{" "}
+        <Link
+          to="/register"
+          style={{ textDecoration: "none", color: "#0162C4" }}
+        >
+          Register
+        </Link>
       </Typography>
     </Box>
   );
