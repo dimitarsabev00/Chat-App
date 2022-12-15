@@ -7,6 +7,7 @@ import Layout from "../components/layouts";
 // config
 import { DEFAULT_PATH } from "../config";
 import LoadingScreen from "../components/LoadingScreen";
+import ProtectedRoute from "../components/ProtectedRoute";
 
 const Loadable = (Component) => (props) => {
   return (
@@ -23,7 +24,15 @@ export default function Router() {
       element: <Layout />,
       children: [
         { element: <Navigate to={DEFAULT_PATH} replace />, index: true },
-        { path: "app", element: <GeneralApp /> },
+        {
+          path: "app",
+          element: (
+            <ProtectedRoute>
+              <GeneralApp />
+            </ProtectedRoute>
+          ),
+        },
+
         { path: "register", element: <Register /> },
         { path: "login", element: <Login /> },
         { path: "404", element: <Page404 /> },
