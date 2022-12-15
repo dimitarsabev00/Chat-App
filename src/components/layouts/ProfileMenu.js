@@ -3,21 +3,8 @@ import { Avatar, Box, Fade, Menu, MenuItem, Stack } from "@mui/material";
 
 import { faker } from "@faker-js/faker";
 import { Gear, SignOut, User } from "phosphor-react";
-
-const Profile_Menu = [
-  {
-    title: "Profile",
-    icon: <User />,
-  },
-  {
-    title: "Settings",
-    icon: <Gear />,
-  },
-  {
-    title: "Logout",
-    icon: <SignOut />,
-  },
-];
+import { signOut } from "firebase/auth";
+import { auth } from "../../firebaseConfig";
 
 const ProfileMenu = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -28,7 +15,9 @@ const ProfileMenu = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
+  const handleLogout = () => {
+    signOut(auth);
+  };
   return (
     <>
       <Avatar
@@ -61,19 +50,39 @@ const ProfileMenu = () => {
       >
         <Box p={1}>
           <Stack spacing={1}>
-            {Profile_Menu.map((el) => (
-              <MenuItem onClick={handleClose}>
-                <Stack
-                  sx={{ width: 100 }}
-                  direction="row"
-                  alignItems={"center"}
-                  justifyContent="space-between"
-                >
-                  <span>{el.title}</span>
-                  {el.icon}
-                </Stack>{" "}
-              </MenuItem>
-            ))}
+            <MenuItem onClick={handleClose}>
+              <Stack
+                sx={{ width: 100 }}
+                direction="row"
+                alignItems={"center"}
+                justifyContent="space-between"
+              >
+                <span>Profile</span>
+                <User />
+              </Stack>
+            </MenuItem>
+            <MenuItem onClick={handleClose}>
+              <Stack
+                sx={{ width: 100 }}
+                direction="row"
+                alignItems={"center"}
+                justifyContent="space-between"
+              >
+                <span>Settings</span>
+                <Gear />
+              </Stack>
+            </MenuItem>
+            <MenuItem onClick={handleLogout}>
+              <Stack
+                sx={{ width: 100 }}
+                direction="row"
+                alignItems={"center"}
+                justifyContent="space-between"
+              >
+                <span>Logout</span>
+                <SignOut />
+              </Stack>
+            </MenuItem>
           </Stack>
         </Box>
       </Menu>
