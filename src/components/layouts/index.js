@@ -7,13 +7,16 @@ import SideBar from "./SideBar";
 
 const Layout = () => {
   const isDesktop = useResponsive("up", "md");
-  const { user } = UserAuth();
-  console.log(user);
+  const { currentUser } = UserAuth();
+  console.log(currentUser);
   return (
     <>
       <Stack direction="row">
-        {isDesktop && user && <SideBar />}
-
+        {isDesktop && currentUser && (
+          <>
+            <SideBar />
+          </>
+        )}
         <Outlet />
       </Stack>
     </>
