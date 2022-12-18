@@ -1,14 +1,16 @@
 import React from "react";
 import { Avatar, Box, Fade, Menu, MenuItem, Stack } from "@mui/material";
 
-import { faker } from "@faker-js/faker";
 import { Gear, SignOut, User } from "phosphor-react";
 import { signOut } from "firebase/auth";
 import { auth } from "../../firebaseConfig";
+import { UserAuth } from "../../contexts/AuthContext";
 
 const ProfileMenu = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const { currentUser } = UserAuth();
   const openMenu = Boolean(anchorEl);
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -25,8 +27,8 @@ const ProfileMenu = () => {
         aria-controls={openMenu ? "profile-positioned-menu" : undefined}
         aria-haspopup="true"
         aria-expanded={openMenu ? "true" : undefined}
-        alt={faker.name.fullName()}
-        src={faker.image.avatar()}
+        alt={currentUser?.displayName}
+        src={currentUser?.photoURL}
         onClick={handleClick}
       />
       <Menu
