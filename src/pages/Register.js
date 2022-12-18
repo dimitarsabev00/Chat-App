@@ -33,13 +33,12 @@ const Register = () => {
             userID: response.user.uid,
             displayName,
             email,
-            password,
             photoURL: downloadURL,
           });
           await setDoc(doc(db, "userChats", response.user.uid), {});
-          navigate("/app");
         });
       });
+      navigate("/");
     } catch (error) {
       setError(true);
     }
