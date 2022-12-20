@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -22,6 +22,7 @@ import {
   doc,
   getDoc,
   getDocs,
+  onSnapshot,
   query,
   serverTimestamp,
   setDoc,
@@ -63,9 +64,20 @@ const Chats = () => {
   const [username, setUsername] = useState("");
   const [user, setUser] = useState(null);
   const { currentUser } = UserAuth();
+  const [chats, setChats] = useState([]);
   const theme = useTheme();
   const isDesktop = useResponsive("up", "md");
-
+  useEffect(() => {
+    const getChats = () => {
+      const unsub = onSnapshot(doc(db, "userChats", currentUser.uid), (doc) => {
+        setChats(doc.data());
+      });
+      return () => {
+        unsub();
+      };
+    };
+    currentUser.uid && getChats();
+  }, [currentUser.uid]);
   const handleSearch = async () => {
     const q = query(
       collection(db, "users"),
@@ -183,22 +195,25 @@ const Chats = () => {
           </Stack>
           <Divider />
         </Stack>
-        <Stack sx={{ flexGrow: 1, overflow: "scroll", height: "100%" }}>
+        <Stack sx={{ flexGrow: 1, overflowY: "scroll", height: "100%" }}>
           <SimpleBarStyle timeout={500} clickOnTrack={false}>
             <Stack spacing={2.4}>
-              <Typography variant="subtitle2" sx={{ color: "#676667" }}>
+              {/* <Typography variant="subtitle2" sx={{ color: "#676667" }}>
                 Pinned
-              </Typography>
+              </Typography> */}
               {/* Pinned Chats List */}
-              {ChatList.filter((el) => el.pinned).map((el, idx) => {
+              {/* {ChatList.filter((el) => el.pinned).map((el, idx) => {
                 return <ChatElement {...el} />;
-              })}
+              })} */}
               <Typography variant="subtitle2" sx={{ color: "#676667" }}>
                 All Chats
               </Typography>
               {/* All Chats List */}
-              {ChatList.filter((el) => !el.pinned).map((el, idx) => {
+              {/* {ChatList.filter((el) => !el.pinned).map((el, idx) => {
                 return <ChatElement {...el} />;
+              })} */}
+              {Object.entries(chats)?.map((el) => {
+                return <ChatElement {...el[1].userInfo} />;
               })}
             </Stack>
           </SimpleBarStyle>
