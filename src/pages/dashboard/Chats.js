@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from "react";
 import {
   Box,
   Button,
@@ -7,6 +7,7 @@ import {
   Stack,
   Typography,
   InputBase,
+  Avatar,
 } from "@mui/material";
 import { ArchiveBox, MagnifyingGlass, UserCirclePlus } from "phosphor-react";
 import { SimpleBarStyle } from "../../components/Scrollbar";
@@ -16,6 +17,19 @@ import useResponsive from "../../hooks/useResponsive";
 import MobileBottomNav from "../../components/layouts/MobileBottomNav";
 import { ChatList } from "../../data";
 import ChatElement from "../../components/ChatElement";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  serverTimestamp,
+  setDoc,
+  updateDoc,
+  where,
+} from "firebase/firestore";
+import { db } from "../../firebaseConfig";
+import { UserAuth } from "../../contexts/AuthContext";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -40,16 +54,71 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: "inherit",
   "& .MuiInputBase-input": {
     padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     width: "100%",
   },
 }));
 
 const Chats = () => {
+  const [username, setUsername] = useState("");
+  const [user, setUser] = useState(null);
+  const { currentUser } = UserAuth();
   const theme = useTheme();
   const isDesktop = useResponsive("up", "md");
 
+  const handleSearch = async () => {
+    const q = query(
+      collection(db, "users"),
+      where("displayName", "==", username)
+    );
+    try {
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+        setUser(doc.data());
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const handleKey = (e) => {
+    e.code === "Enter" && handleSearch();
+  };
+  const handleSelect = async () => {
+    const combinedId =
+      currentUser.uid > user.userID
+        ? currentUser.uid + user.userID
+        : user.userID + currentUser.uid;
+    try {
+      const res = await getDoc(doc(db, "chats", combinedId));
+
+      if (!res.exists()) {
+        //Create a chat in chats collection
+        await setDoc(doc(db, "chats", combinedId), { messages: [] });
+
+        //Create user chats
+        await updateDoc(doc(db, "userChats", currentUser.uid), {
+          [combinedId + ".userInfo"]: {
+            uid: user.userID,
+            displayName: user.displayName,
+            photoURL: user.photoURL,
+          },
+          [combinedId + ".date"]: serverTimestamp(),
+        });
+        await updateDoc(doc(db, "userChats", user.userID), {
+          [combinedId + ".userInfo"]: {
+            uid: currentUser.uid,
+            displayName: currentUser.displayName,
+            photoURL: currentUser.photoURL,
+          },
+          [combinedId + ".date"]: serverTimestamp(),
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    setUser(null);
+    setUsername("");
+  };
   return (
     <Box
       sx={{
@@ -90,9 +159,23 @@ const Chats = () => {
             <StyledInputBase
               placeholder="Search…"
               inputProps={{ "aria-label": "search" }}
+              onChange={(e) => {
+                setUsername(e.target.value);
+              }}
+              value={username}
+              onKeyDown={handleKey}
             />
           </Search>
         </Stack>
+        {user && (
+          <Stack spacing={1} onClick={handleSelect} sx={{ cursor: "pointer" }}>
+            <Stack direction={"row"} spacing={1.5} alignItems="center">
+              <Avatar src={user?.photoURL} />
+              <Typography variant="subtitle2">{user?.displayName}</Typography>
+            </Stack>
+            <Divider />
+          </Stack>
+        )}
         <Stack spacing={1}>
           <Stack direction={"row"} spacing={1.5} alignItems="center">
             <ArchiveBox size={24} />
