@@ -113,6 +113,7 @@ const Chats = () => {
             uid: user.userID,
             displayName: user.displayName,
             photoURL: user.photoURL,
+            isPinned: false,
           },
           [combinedId + ".date"]: serverTimestamp(),
         });
@@ -121,6 +122,7 @@ const Chats = () => {
             uid: currentUser.uid,
             displayName: currentUser.displayName,
             photoURL: currentUser.photoURL,
+            isPinned: false,
           },
           [combinedId + ".date"]: serverTimestamp(),
         });
@@ -212,9 +214,19 @@ const Chats = () => {
               {/* {ChatList.filter((el) => !el.pinned).map((el, idx) => {
                 return <ChatElement {...el} />;
               })} */}
-              {Object.entries(chats)?.map((el) => {
-                return <ChatElement {...el[1].userInfo} />;
-              })}
+              {!Object.entries(chats).length < 1 ? (
+                <Box>
+                  {Object.entries(chats)?.map((chat) => {
+                    return (
+                      <>
+                        <ChatElement {...chat[1]?.userInfo} />
+                      </>
+                    );
+                  })}
+                </Box>
+              ) : (
+                <Box>No chats</Box>
+              )}
             </Stack>
           </SimpleBarStyle>
         </Stack>
