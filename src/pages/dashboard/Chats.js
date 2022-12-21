@@ -214,7 +214,7 @@ const Chats = () => {
               {/* {ChatList.filter((el) => !el.pinned).map((el, idx) => {
                 return <ChatElement {...el} />;
               })} */}
-              {!Object.entries(chats).length < 1 ? (
+              {chats && !Object.entries(chats).length < 1 ? (
                 <Box>
                   {Object.entries(chats)?.map((chat) => {
                     return (
