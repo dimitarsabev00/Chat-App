@@ -21,7 +21,11 @@ export default function Router() {
   return useRoutes([
     {
       path: "/",
-      element: <Layout />,
+      element: (
+        <ProtectedRoute>
+          <Layout />
+        </ProtectedRoute>
+      ),
       children: [
         { element: <Navigate to={DEFAULT_PATH} replace />, index: true },
         {
@@ -32,13 +36,11 @@ export default function Router() {
             </ProtectedRoute>
           ),
         },
-
-        { path: "register", element: <Register /> },
-        { path: "login", element: <Login /> },
-        { path: "404", element: <Page404 /> },
-        { path: "*", element: <Navigate to="/404" replace /> },
       ],
     },
+    { path: "register", element: <Register /> },
+    { path: "login", element: <Login /> },
+    { path: "404", element: <Page404 /> },
     { path: "*", element: <Navigate to="/404" replace /> },
   ]);
 }
