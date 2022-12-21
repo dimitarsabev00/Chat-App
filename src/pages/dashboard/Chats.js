@@ -110,7 +110,7 @@ const Chats = () => {
         //Create user chats
         await updateDoc(doc(db, "userChats", currentUser.uid), {
           [combinedId + ".userInfo"]: {
-            uid: user.userID,
+            id: user.userID,
             displayName: user.displayName,
             photoURL: user.photoURL,
             isPinned: false,
@@ -119,7 +119,7 @@ const Chats = () => {
         });
         await updateDoc(doc(db, "userChats", user.userID), {
           [combinedId + ".userInfo"]: {
-            uid: currentUser.uid,
+            id: currentUser.uid,
             displayName: currentUser.displayName,
             photoURL: currentUser.photoURL,
             isPinned: false,
@@ -215,15 +215,11 @@ const Chats = () => {
                 return <ChatElement {...el} />;
               })} */}
               {chats && !Object.entries(chats).length < 1 ? (
-                <Box>
+                <>
                   {Object.entries(chats)?.map((chat) => {
-                    return (
-                      <>
-                        <ChatElement {...chat[1]?.userInfo} />
-                      </>
-                    );
+                    return <ChatElement {...chat[1]?.userInfo} />;
                   })}
-                </Box>
+                </>
               ) : (
                 <Box>No chats</Box>
               )}
