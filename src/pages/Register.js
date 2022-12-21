@@ -1,6 +1,6 @@
 import { Box, Button, InputLabel, TextField, Typography } from "@mui/material";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { Image } from "phosphor-react";
 import { useState } from "react";
@@ -34,6 +34,7 @@ const Register = () => {
             displayName,
             email,
             photoURL: downloadURL,
+            createdAt: serverTimestamp(),
           });
           await setDoc(doc(db, "userChats", response.user.uid), {});
         });
