@@ -11,11 +11,11 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [displayName, setDisplayName] = useState("");
   const [file, setFile] = useState("");
-  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const handleRegisterUserSubmit = async (e) => {
     e.preventDefault();
-
+    setLoading(true);
     try {
       const response = await createUserWithEmailAndPassword(
         auth,
@@ -39,10 +39,15 @@ const Register = () => {
           });
           await setDoc(doc(db, "userChats", response.user.uid), {});
         });
+        setEmail("");
+        setPassword("");
+        setDisplayName("");
+        setLoading(false);
       });
       navigate("/");
     } catch (error) {
-      setError(true);
+      setLoading(false);
+      console.log(error);
     }
   };
   return (
@@ -107,9 +112,8 @@ const Register = () => {
           <Box>Add an avatar</Box>
         </InputLabel>
         <Button variant="contained" type="submit">
-          Sign Up
+          {loading ? "Loading.." : "Sign Up"}
         </Button>
-        {error && <span>Somethink went wrong</span>}
       </form>
       <Typography>
         You do have an account?{" "}

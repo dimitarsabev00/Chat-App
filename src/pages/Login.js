@@ -7,19 +7,22 @@ import { doc, updateDoc } from "firebase/firestore";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const handleLoginUser = async (e) => {
     e.preventDefault();
-
+    setLoading(true);
     try {
       const result = await signInWithEmailAndPassword(auth, email, password);
       await updateDoc(doc(db, "users", result.user.uid), { isOnline: true });
       setEmail("");
       setPassword("");
+
+      setLoading(false);
       navigate("/");
     } catch (error) {
-      setError(true);
+      setLoading(false);
+      console.log(error);
     }
   };
 
@@ -63,9 +66,8 @@ const Login = () => {
         />
 
         <Button variant="contained" type="submit">
-          Sign In
+          {loading ? "Loading.." : "Sign In"}
         </Button>
-        {error && <span>Somethink went wrong</span>}
       </form>
       <Typography>
         You do have an account?{" "}
