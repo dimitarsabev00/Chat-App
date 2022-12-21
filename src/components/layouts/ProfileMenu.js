@@ -3,8 +3,9 @@ import { Avatar, Box, Fade, Menu, MenuItem, Stack } from "@mui/material";
 
 import { Gear, SignOut, User } from "phosphor-react";
 import { signOut } from "firebase/auth";
-import { auth } from "../../firebaseConfig";
+import { auth, db } from "../../firebaseConfig";
 import { UserAuth } from "../../contexts/AuthContext";
+import { doc, updateDoc } from "firebase/firestore";
 
 const ProfileMenu = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -17,8 +18,11 @@ const ProfileMenu = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const handleLogout = () => {
-    signOut(auth);
+  const handleLogout = async () => {
+    await updateDoc(doc(db, "users", currentUser.uid), {
+      isOnline: false,
+    });
+    await signOut(auth);
   };
   return (
     <>
