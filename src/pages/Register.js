@@ -35,6 +35,7 @@ const Register = () => {
             email,
             photoURL: downloadURL,
             createdAt: serverTimestamp(),
+            isOnline: "true",
           });
           await setDoc(doc(db, "userChats", response.user.uid), {});
         });
