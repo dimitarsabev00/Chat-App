@@ -6,12 +6,13 @@ import { signOut } from "firebase/auth";
 import { auth, db } from "../../firebaseConfig";
 import { UserAuth } from "../../contexts/AuthContext";
 import { doc, updateDoc } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
 
 const ProfileMenu = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const { currentUser } = UserAuth();
   const openMenu = Boolean(anchorEl);
-
+  const navigate = useNavigate();
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -23,6 +24,7 @@ const ProfileMenu = () => {
       isOnline: false,
     });
     await signOut(auth);
+    navigate("/login");
   };
   return (
     <>
