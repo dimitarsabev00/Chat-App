@@ -13,31 +13,27 @@ const Register = () => {
   const [file, setFile] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const handleRegisterUserSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
+      const res = await createUserWithEmailAndPassword(auth, email, password);
       const imageRef = ref(storage, `avatars/${displayName}`);
       uploadBytes(imageRef, file).then(() => {
-        getDownloadURL(imageRef).then(async (downloadURL) => {
-          await updateProfile(response.user, {
+        getDownloadURL(imageRef).then(async (photoURL) => {
+          await updateProfile(res.user, {
             displayName,
-            photoURL: downloadURL,
+            photoURL,
           });
-          await setDoc(doc(db, "users", response.user.uid), {
-            userID: response.user.uid,
+          await setDoc(doc(db, "users", res.user.uid), {
+            uid: res.user.uid,
             displayName,
             email,
-            photoURL: downloadURL,
+            photoURL,
             createdAt: serverTimestamp(),
             isOnline: "true",
           });
-          await setDoc(doc(db, "userChats", response.user.uid), {});
+          await setDoc(doc(db, "userChats", res.user.uid), {});
         });
         setEmail("");
         setPassword("");
@@ -70,7 +66,7 @@ const Register = () => {
           gap: "15px",
           margin: "1rem",
         }}
-        onSubmit={handleRegisterUserSubmit}
+        onSubmit={handleSubmit}
       >
         <TextField
           type="text"
