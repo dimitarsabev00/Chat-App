@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Avatar, Box, Fade, Menu, MenuItem, Stack } from "@mui/material";
 
 import { Gear, SignOut, User } from "phosphor-react";
@@ -9,7 +9,7 @@ import { doc, updateDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 
 const ProfileMenu = () => {
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
   const { currentUser } = UserAuth();
   const openMenu = Boolean(anchorEl);
   const navigate = useNavigate();
