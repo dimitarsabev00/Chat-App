@@ -17,9 +17,11 @@ import ChatElement from "../../components/ChatElement";
 import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "../../firebaseConfig";
 import { UserAuth } from "../../contexts/AuthContext";
+import { ChatAuth } from "../../contexts/ChatContext";
 import Search from "../../components/Search";
 
 const Chats = () => {
+  const { dispatch } = ChatAuth();
   const [chats, setChats] = useState([]);
   const { currentUser } = UserAuth();
   const theme = useTheme();
@@ -36,6 +38,10 @@ const Chats = () => {
     currentUser.uid && getChats();
   }, [currentUser.uid]);
 
+  const handleSelectUser = (chatInfo) => {
+    dispatch({ type: "CHANGE_USER", payload: chatInfo });
+    console.log(chatInfo);
+  };
   return (
     <Box
       sx={{
@@ -104,7 +110,7 @@ const Chats = () => {
                         <ChatElement
                           chatInfo={chat[1]?.userInfo}
                           key={chat[0]}
-                          // selectUser={selectUser}
+                          handleSelectUser={handleSelectUser}
                           lastMessage={chat[1]?.lastMessage?.text}
                         />
                       );
