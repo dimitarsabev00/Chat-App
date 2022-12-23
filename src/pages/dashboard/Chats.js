@@ -40,7 +40,6 @@ const Chats = () => {
 
   const handleSelectUser = (chatInfo) => {
     dispatch({ type: "CHANGE_USER", payload: chatInfo });
-    console.log(chatInfo);
   };
   return (
     <Box
