@@ -1,5 +1,10 @@
 import { Stack, Box } from "@mui/material";
+import { doc, onSnapshot } from "firebase/firestore";
+import { useEffect } from "react";
+import { useState } from "react";
+import { ChatAuth } from "../../contexts/ChatContext";
 import { Chat_History } from "../../data";
+import { db } from "../../firebaseConfig";
 import {
   DocMsg,
   LinkMsg,
@@ -10,10 +15,21 @@ import {
 } from "./MsgTypes";
 
 const Conversation = ({ isMobile }) => {
+  const [messages, setMessages] = useState("");
+  const { data } = ChatAuth();
+  useEffect(() => {
+    const unsub = onSnapshot(doc(db, "chats", data.chatId), (doc) => {
+      doc.exists() && setMessages(doc.data().messages);
+    });
+    return () => {
+      unsub();
+    };
+  }, [data.chatId]);
+  console.log(messages);
   return (
     <Box p={isMobile ? 1 : 3}>
       <Stack spacing={3}>
-        {Chat_History.map((el, idx) => {
+        {/* {Chat_History.map((el, idx) => {
           switch (el.type) {
             case "divider":
               return (
@@ -56,7 +72,11 @@ const Conversation = ({ isMobile }) => {
             default:
               return <></>;
           }
-        })}
+        })} */}
+        {messages &&
+          messages.map((message) => (
+            <TextMsg message={message} key={message.id} />
+          ))}
       </Stack>
     </Box>
   );

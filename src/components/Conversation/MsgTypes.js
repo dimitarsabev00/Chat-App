@@ -5,27 +5,38 @@ import { DownloadSimple, Image } from "phosphor-react";
 import { Link } from "react-router-dom";
 import truncateString from "../../utils/truncate";
 import MessageOptions from "./MessageOptions";
+import { UserAuth } from "../../contexts/AuthContext";
+import { ChatAuth } from "../../contexts/ChatContext";
 
-const TextMsg = ({ el }) => {
+const TextMsg = ({ message }) => {
+  const { currentUser } = UserAuth();
+  const { data } = ChatAuth();
   const theme = useTheme();
+
   return (
-    <Stack direction="row" justifyContent={el.incoming ? "start" : "end"}>
+    <Stack
+      direction="row"
+      justifyContent={message.senderId === currentUser.uid ? "start" : "end"}
+    >
       <Box
         px={1.5}
         py={1.5}
         sx={{
-          backgroundColor: el.incoming
-            ? alpha(theme.palette.background.default, 1)
-            : theme.palette.primary.main,
+          backgroundColor:
+            message.senderId === currentUser.uid
+              ? alpha(theme.palette.background.default, 1)
+              : theme.palette.primary.main,
           borderRadius: 1.5,
           width: "max-content",
         }}
       >
         <Typography
           variant="body2"
-          color={el.incoming ? theme.palette.text : "#fff"}
+          color={
+            message.senderId === currentUser.uid ? theme.palette.text : "#fff"
+          }
         >
-          {el.message}
+          {message?.text}
         </Typography>
       </Box>
       <MessageOptions />
