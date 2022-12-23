@@ -10,22 +10,25 @@ import SettingsProvider from "./contexts/SettingsContext";
 import { Provider as ReduxProvider } from "react-redux";
 import { store } from "./redux/store";
 import { AuthContextProvider } from "./contexts/AuthContext";
+import { ChatContextProvider } from "./contexts/ChatContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
   <AuthContextProvider>
-    <React.StrictMode>
-      <HelmetProvider>
-        <ReduxProvider store={store}>
-          <SettingsProvider>
-            <BrowserRouter>
-              <App />
-            </BrowserRouter>
-          </SettingsProvider>
-        </ReduxProvider>
-      </HelmetProvider>
-    </React.StrictMode>
+    <ChatContextProvider>
+      <React.StrictMode>
+        <HelmetProvider>
+          <ReduxProvider store={store}>
+            <SettingsProvider>
+              <BrowserRouter>
+                <App />
+              </BrowserRouter>
+            </SettingsProvider>
+          </ReduxProvider>
+        </HelmetProvider>
+      </React.StrictMode>
+    </ChatContextProvider>
   </AuthContextProvider>
 );
 
