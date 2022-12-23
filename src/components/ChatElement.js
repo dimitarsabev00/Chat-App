@@ -1,5 +1,4 @@
 import {
-  alpha,
   Avatar,
   Badge,
   Box,
@@ -8,7 +7,6 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import { useSearchParams } from "react-router-dom";
 import truncateString from "../utils/truncate";
 import StyledBadge from "./StyledBadge";
 const StyledChatBox = styled(Box)(({ theme }) => ({
@@ -17,37 +15,24 @@ const StyledChatBox = styled(Box)(({ theme }) => ({
   },
 }));
 
-const ChatElement = ({ img, name, msg, time, unread, online, id }) => {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const selectedChatId = searchParams.get("id");
-
-  let isSelected = +selectedChatId === id;
-
-  if (!selectedChatId) {
-    isSelected = false;
-  }
-
+const ChatElement = ({
+  chatInfo,
+  isOnline = true,
+  handleSelectUser,
+  lastMessage,
+}) => {
+  const lastMessageString =
+    lastMessage === undefined ? "Click to chat" : lastMessage;
   const theme = useTheme();
-
   return (
     <StyledChatBox
       onClick={() => {
-        searchParams.set("id", id);
-        searchParams.set("type", "individual-chat");
-        setSearchParams(searchParams);
+        handleSelectUser(chatInfo);
       }}
       sx={{
         width: "100%",
 
         borderRadius: 1,
-
-        backgroundColor: isSelected
-          ? theme.palette.mode === "light"
-            ? alpha(theme.palette.primary.main, 0.5)
-            : theme.palette.primary.main
-          : theme.palette.mode === "light"
-          ? "#fff"
-          : theme.palette.background.paper,
       }}
       p={2}
     >
@@ -58,31 +43,29 @@ const ChatElement = ({ img, name, msg, time, unread, online, id }) => {
       >
         <Stack direction="row" spacing={2}>
           {" "}
-          {online ? (
+          {isOnline ? (
             <StyledBadge
               overlap="circular"
               anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
               variant="dot"
             >
-              <Avatar alt={name} src={img} />
+              <Avatar alt={chatInfo?.displayName} src={chatInfo?.photoURL} />
             </StyledBadge>
           ) : (
-            <Avatar alt={name} src={img} />
+            <Avatar alt={chatInfo?.displayName} src={chatInfo?.photoURL} />
           )}
           <Stack spacing={0.3}>
-            <Typography variant="subtitle2">{name}</Typography>
-            <Typography variant="caption">{truncateString(msg, 20)}</Typography>
+            <Typography variant="subtitle2">{chatInfo?.displayName}</Typography>
+            <Typography variant="caption">
+              {truncateString(lastMessageString, 20)}
+            </Typography>
           </Stack>
         </Stack>
         <Stack spacing={2} alignItems={"center"}>
           <Typography sx={{ fontWeight: 600 }} variant="caption">
-            {time}
+            {"10:24"}
           </Typography>
-          <Badge
-            className="unread-count"
-            color="primary"
-            badgeContent={unread}
-          />
+          <Badge className="unread-count" color="primary" badgeContent={"1"} />
         </Stack>
       </Stack>
     </StyledChatBox>
