@@ -25,7 +25,6 @@ const Conversation = ({ isMobile }) => {
       unsub();
     };
   }, [data.chatId]);
-  console.log(messages);
   return (
     <Box p={isMobile ? 1 : 3}>
       <Stack spacing={3}>
