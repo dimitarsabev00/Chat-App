@@ -9,12 +9,13 @@ import Contact from "../../components/SideBarContact";
 import NoChat from "../../assets/Illustration/NoChat";
 import { useSelector } from "react-redux";
 import Media from "../../components/SharedMessages";
+import { ChatAuth } from "../../contexts/ChatContext";
 
 const GeneralApp = () => {
   const [searchParams] = useSearchParams();
 
   const theme = useTheme();
-
+  const { data } = ChatAuth();
   const { sideBar } = useSelector((state) => state.app);
 
   return (
@@ -38,8 +39,7 @@ const GeneralApp = () => {
                 : "6px solid #0162C4",
           }}
         >
-          {searchParams.get("type") === "individual-chat" &&
-          searchParams.get("id") ? (
+          {data ? (
             <ChatComponent />
           ) : (
             <Stack
