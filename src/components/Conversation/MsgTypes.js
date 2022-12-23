@@ -5,16 +5,22 @@ import { DownloadSimple, Image } from "phosphor-react";
 import { Link } from "react-router-dom";
 import truncateString from "../../utils/truncate";
 import MessageOptions from "./MessageOptions";
+import { useRef } from "react";
+import { useEffect } from "react";
 import { UserAuth } from "../../contexts/AuthContext";
 import { ChatAuth } from "../../contexts/ChatContext";
 
 const TextMsg = ({ message }) => {
   const { currentUser } = UserAuth();
-  const { data } = ChatAuth();
+  const ref = useRef();
   const theme = useTheme();
+  useEffect(() => {
+    ref.current?.scrollIntoView({ behavior: "smooth" });
+  }, [message]);
 
   return (
     <Stack
+      ref={ref}
       direction="row"
       justifyContent={message.senderId === currentUser.uid ? "start" : "end"}
     >
