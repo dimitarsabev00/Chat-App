@@ -25,7 +25,19 @@ import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 import { useSelector } from "react-redux";
 import { useState } from "react";
-
+import {
+  addDoc,
+  arrayUnion,
+  doc,
+  serverTimestamp,
+  setDoc,
+  Timestamp,
+  updateDoc,
+} from "firebase/firestore";
+import { db } from "../../firebaseConfig";
+import { ChatAuth } from "../../contexts/ChatContext";
+import { v4 as uuid } from "uuid";
+import { UserAuth } from "../../contexts/AuthContext";
 const StyledSendMsgInput = styled(TextField)(({ theme }) => ({
   "& .MuiInputBase-input": {
     paddingTop: "12px !important",
@@ -66,10 +78,15 @@ const Actions = [
   },
 ];
 
-const ChatInput = ({ openPicker, setOpenPicker }) => {
+const ChatInput = ({ openPicker, setOpenPicker, text, setText }) => {
   const [openActions, setOpenActions] = useState(false);
+
   return (
     <StyledSendMsgInput
+      onChange={(e) => {
+        setText(e.target.value);
+      }}
+      value={text}
       fullWidth
       placeholder="Write a message..."
       variant="filled"
@@ -132,13 +149,28 @@ const ChatInput = ({ openPicker, setOpenPicker }) => {
 };
 
 const Footer = () => {
+  const [text, setText] = useState("");
+  const { data } = ChatAuth();
+  const { currentUser } = UserAuth();
   const theme = useTheme();
 
   const isMobile = useResponsive("between", "md", "xs", "sm");
 
   const { sideBar } = useSelector((state) => state.app);
 
-  const [openPicker, setOpenPicker] = React.useState(false);
+  const [openPicker, setOpenPicker] = useState(false);
+
+  const handleSendMsg = async () => {
+    await updateDoc(doc(db, "chats", data.chatId), {
+      messages: arrayUnion({
+        id: uuid(),
+        text,
+        senderId: currentUser.uid,
+        date: Timestamp.now(),
+      }),
+    });
+    setText("");
+  };
   return (
     <Box
       sx={{
@@ -176,9 +208,15 @@ const Footer = () => {
                 }}
               />
             </Box>
-            <ChatInput openPicker={openPicker} setOpenPicker={setOpenPicker} />
+            <ChatInput
+              openPicker={openPicker}
+              setOpenPicker={setOpenPicker}
+              text={text}
+              setText={setText}
+            />
           </Stack>
           <Box
+            onClick={handleSendMsg}
             sx={{
               height: 48,
               width: 48,
