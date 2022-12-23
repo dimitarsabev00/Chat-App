@@ -17,6 +17,7 @@ import { ToggleSidebar } from "../../redux/slices/app";
 import { useDispatch } from "react-redux";
 import StyledBadge from "../StyledBadge";
 import { useState } from "react";
+import { ChatAuth } from "../../contexts/ChatContext";
 
 const Conversation_Menu = [
   {
@@ -37,7 +38,7 @@ const ChatHeader = () => {
   const dispatch = useDispatch();
   const isMobile = useResponsive("between", "md", "xs", "sm");
   const theme = useTheme();
-
+  const { data } = ChatAuth();
   const [conversationMenuAnchorEl, setConversationMenuAnchorEl] =
     useState(null);
   const openConversationMenu = Boolean(conversationMenuAnchorEl);
@@ -80,12 +81,19 @@ const ChatHeader = () => {
               }}
               variant="dot"
             >
-              <Avatar alt={faker.name.fullName()} src={faker.image.avatar()} />
+              <Avatar
+                alt={data?.user?.displayName}
+                src={data?.user?.photoURL}
+              />
             </StyledBadge>
           </Box>
           <Stack spacing={0.2}>
-            <Typography variant="subtitle2">{faker.name.fullName()}</Typography>
-            <Typography variant="caption">Online</Typography>
+            <Typography variant="subtitle2">
+              {data?.user?.displayName}
+            </Typography>
+            <Typography variant="caption">
+              {true ? "Online" : "Offline"}
+            </Typography>
           </Stack>
         </Stack>
         <Stack direction={"row"} alignItems="center" spacing={isMobile ? 1 : 3}>
