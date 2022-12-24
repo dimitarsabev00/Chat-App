@@ -7,10 +7,12 @@ import { auth, db } from "../../firebaseConfig";
 import { UserAuth } from "../../contexts/AuthContext";
 import { doc, updateDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
+import { ChatAuth } from "../../contexts/ChatContext";
 
 const ProfileMenu = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const { currentUser } = UserAuth();
+  const { dispatch } = ChatAuth();
   const openMenu = Boolean(anchorEl);
   const navigate = useNavigate();
   const handleClick = (event) => {
@@ -23,6 +25,7 @@ const ProfileMenu = () => {
     await updateDoc(doc(db, "users", currentUser.uid), {
       isOnline: false,
     });
+    dispatch({ type: "LOGOUT_FROM_APP" });
     await signOut(auth);
     navigate("/login");
   };
