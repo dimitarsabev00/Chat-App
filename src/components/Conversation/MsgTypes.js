@@ -8,7 +8,6 @@ import MessageOptions from "./MessageOptions";
 import { useRef } from "react";
 import { useEffect } from "react";
 import { UserAuth } from "../../contexts/AuthContext";
-import { ChatAuth } from "../../contexts/ChatContext";
 
 const TextMsg = ({ message }) => {
   const { currentUser } = UserAuth();
@@ -22,7 +21,7 @@ const TextMsg = ({ message }) => {
     <Stack
       ref={ref}
       direction="row"
-      justifyContent={message.senderId === currentUser.uid ? "start" : "end"}
+      justifyContent={message.senderId === currentUser.uid ? "end" : "start"}
     >
       <Box
         px={1.5}
@@ -30,8 +29,8 @@ const TextMsg = ({ message }) => {
         sx={{
           backgroundColor:
             message.senderId === currentUser.uid
-              ? alpha(theme.palette.background.default, 1)
-              : theme.palette.primary.main,
+              ? theme.palette.primary.main
+              : alpha(theme.palette.background.default, 1),
           borderRadius: 1.5,
           width: "max-content",
         }}
@@ -39,7 +38,7 @@ const TextMsg = ({ message }) => {
         <Typography
           variant="body2"
           color={
-            message.senderId === currentUser.uid ? theme.palette.text : "#fff"
+            message.senderId === currentUser.uid ? "#fff" : theme.palette.text
           }
         >
           {message?.text}
