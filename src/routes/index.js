@@ -36,6 +36,7 @@ export default function Router() {
             </ProtectedRoute>
           ),
         },
+        { path: "settings", element: <Settings /> },
       ],
     },
     { path: "register", element: <Register /> },
@@ -51,3 +52,4 @@ const GeneralApp = Loadable(
 const Page404 = Loadable(lazy(() => import("../pages/Page404")));
 const Register = Loadable(lazy(() => import("../pages/Register")));
 const Login = Loadable(lazy(() => import("../pages/Login")));
+const Settings = Loadable(lazy(() => import("../pages/dashboard/Settings")));
