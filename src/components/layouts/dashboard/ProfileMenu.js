@@ -3,11 +3,11 @@ import { Avatar, Box, Fade, Menu, MenuItem, Stack } from "@mui/material";
 
 import { Gear, SignOut, User } from "phosphor-react";
 import { signOut } from "firebase/auth";
-import { auth, db } from "../../firebaseConfig";
-import { UserAuth } from "../../contexts/AuthContext";
+import { auth, db } from "../../../firebaseConfig";
+import { UserAuth } from "../../../contexts/AuthContext";
 import { doc, updateDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
-import { ChatAuth } from "../../contexts/ChatContext";
+import { ChatAuth } from "../../../contexts/ChatContext";
 
 const ProfileMenu = () => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -27,7 +27,7 @@ const ProfileMenu = () => {
     });
     dispatch({ type: "LOGOUT_FROM_APP" });
     await signOut(auth);
-    navigate("/login");
+    navigate("/auth/login");
   };
   return (
     <>

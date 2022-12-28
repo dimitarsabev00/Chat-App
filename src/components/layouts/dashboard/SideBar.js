@@ -1,11 +1,11 @@
 import { Box, IconButton, Stack, useTheme, Divider } from "@mui/material";
 import { Gear } from "phosphor-react";
 import { useState } from "react";
-import useSettings from "../../hooks/useSettings";
+import useSettings from "../../../hooks/useSettings";
 
-import Logo from "../../assets/Images/logo.ico";
-import { Nav_Buttons } from "../../data";
-import AntSwitch from "../../components/AntSwitch";
+import Logo from "../../../assets/Images/logo.ico";
+import { Nav_Buttons } from "../../../data";
+import AntSwitch from "../../../components/AntSwitch";
 import ProfileMenu from "./ProfileMenu";
 
 const SideBar = () => {

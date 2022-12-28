@@ -5,7 +5,7 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { Image } from "phosphor-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { auth, db, storage } from "../firebaseConfig";
+import { auth, db, storage } from "../../firebaseConfig";
 const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -113,7 +113,10 @@ const Register = () => {
       </form>
       <Typography>
         You do have an account?{" "}
-        <Link to="/login" style={{ textDecoration: "none", color: "#0162C4" }}>
+        <Link
+          to="/auth/login"
+          style={{ textDecoration: "none", color: "#0162C4" }}
+        >
           Login
         </Link>
       </Typography>

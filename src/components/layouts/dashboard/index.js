@@ -1,11 +1,11 @@
 import { Stack } from "@mui/material";
 import React from "react";
 import { Outlet } from "react-router-dom";
-import { UserAuth } from "../../contexts/AuthContext";
-import useResponsive from "../../hooks/useResponsive";
+import { UserAuth } from "../../../contexts/AuthContext";
+import useResponsive from "../../../hooks/useResponsive";
 import SideBar from "./SideBar";
 
-const Layout = () => {
+const DashboardLayout = () => {
   const isDesktop = useResponsive("up", "md");
   const { currentUser } = UserAuth();
   return (
@@ -22,4 +22,4 @@ const Layout = () => {
   );
 };
 
-export default Layout;
+export default DashboardLayout;
