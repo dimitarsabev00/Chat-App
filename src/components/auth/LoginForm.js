@@ -17,7 +17,7 @@ import { Eye, EyeSlash } from "phosphor-react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../../firebaseConfig";
 import { doc, updateDoc } from "firebase/firestore";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link as RouterLink } from "react-router-dom";
 const LoginForm = () => {
   const [showPasssword, setShowPassword] = useState(false);
 
@@ -91,7 +91,13 @@ const LoginForm = () => {
         />
       </Stack>
       <Stack alignItems={"flex-end"} sx={{ my: 2 }}>
-        <Link variant="body2" color="inherit" underline="always">
+        <Link
+          component={RouterLink}
+          to="/auth/reset-password"
+          variant="body2"
+          color="inherit"
+          underline="always"
+        >
           Forgot Password?
         </Link>
       </Stack>

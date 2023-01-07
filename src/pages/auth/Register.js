@@ -1,11 +1,14 @@
-import { Box, Button, InputLabel, TextField, Typography } from "@mui/material";
+import { Stack, Typography, Link } from "@mui/material";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { Image } from "phosphor-react";
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
+import AuthSocial from "../../components/auth/AuthSocial";
+import RegisterForm from "../../components/auth/RegisterForm";
 import { auth, db, storage } from "../../firebaseConfig";
+
 const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -47,80 +50,43 @@ const Register = () => {
     }
   };
   return (
-    <Box
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        flexDirection: "column",
-        margin: "0 auto",
-        width: "80%",
-        minHeight: "1000px",
-      }}
-    >
-      <Typography>Register</Typography>
-      <form
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "15px",
-          margin: "1rem",
+    <>
+      <Stack spacing={2} sx={{ mb: 5, position: "relative" }}>
+        <Typography variant="h4">Get started with Chat Application.</Typography>
+
+        <Stack direction="row" spacing={0.5}>
+          <Typography variant="body2"> Already have an account? </Typography>
+
+          <Link component={RouterLink} to={"/auth/login"} variant="subtitle2">
+            Sign in
+          </Link>
+        </Stack>
+      </Stack>
+      {/* Form */}
+      <RegisterForm />
+
+      <Typography
+        component="div"
+        sx={{
+          color: "text.secondary",
+          mt: 3,
+          typography: "caption",
+          textAlign: "center",
         }}
-        onSubmit={handleSubmit}
       >
-        <TextField
-          type="text"
-          placeholder="display name"
-          value={displayName}
-          onChange={(e) => {
-            setDisplayName(e.target.value);
-          }}
-        />
-        <TextField
-          type="email"
-          placeholder="email"
-          value={email}
-          onChange={(e) => {
-            setEmail(e.target.value);
-          }}
-        />
-        <TextField
-          type="password"
-          placeholder="password"
-          value={password}
-          onChange={(e) => {
-            setPassword(e.target.value);
-          }}
-        />
-        <TextField
-          sx={{ display: "none" }}
-          type="file"
-          id="file"
-          onChange={(e) => {
-            setFile(e.target.files[0]);
-          }}
-        />
-        <InputLabel
-          htmlFor="file"
-          style={{ display: "flex", alignItems: "center", gap: "5px" }}
-        >
-          <Image size={40} />
-          <Box>Add an avatar</Box>
-        </InputLabel>
-        <Button variant="contained" type="submit">
-          {loading ? "Loading.." : "Sign Up"}
-        </Button>
-      </form>
-      <Typography>
-        You do have an account?{" "}
-        <Link
-          to="/auth/login"
-          style={{ textDecoration: "none", color: "#0162C4" }}
-        >
-          Login
+        {"By signing up, I agree to "}
+        <Link underline="always" color="text.primary">
+          Terms of Service
         </Link>
+        {" and "}
+        <Link underline="always" color="text.primary">
+          Privacy Policy
+        </Link>
+        .
       </Typography>
-    </Box>
+
+      <AuthSocial />
+    </>
   );
 };
 
