@@ -7,7 +7,8 @@ import FormProvider, { RHFTextField } from "../../components/hook-form";
 import { Button } from "@mui/material";
 
 // ----------------------------------------------------------------------
-
+import { auth } from "../../firebaseConfig";
+import { sendPasswordResetEmail } from "firebase/auth";
 const ResetPasswordForm = () => {
   const ResetPasswordSchema = Yup.object().shape({
     email: Yup.string()
@@ -27,9 +28,10 @@ const ResetPasswordForm = () => {
 
   const onSubmit = async (data) => {
     try {
-      //   Added ResetPassword Functionality
+      await sendPasswordResetEmail(auth, data.email);
+      console.log("Email was sent");
     } catch (error) {
-      console.error(error);
+      console.error("Could not send reset password");
     }
   };
 
