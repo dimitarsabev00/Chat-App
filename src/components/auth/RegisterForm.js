@@ -15,6 +15,10 @@ import {
 // import { LoadingButton } from "@mui/lab";
 import FormProvider, { RHFTextField } from "../../components/hook-form";
 import { Eye, EyeSlash } from "phosphor-react";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { auth, db } from "../../firebaseConfig";
+import { doc, serverTimestamp, setDoc } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
 
 // ----------------------------------------------------------------------
 
@@ -48,10 +52,29 @@ const RegisterForm = () => {
     handleSubmit,
     formState: { errors, isSubmitting, isSubmitSuccessful },
   } = methods;
-
+  const navigate = useNavigate();
   const onSubmit = async (data) => {
     try {
-      // Added Register Functionality
+      const res = await createUserWithEmailAndPassword(
+        auth,
+        data.email,
+        data.password
+      );
+
+      await updateProfile(res.user, {
+        displayName: `${data.firstName} ${data.lastName}`,
+      });
+      await setDoc(doc(db, "users", res.user.uid), {
+        uid: res.user.uid,
+        displayName: `${data.firstName} ${data.lastName}`,
+        email: data.email,
+
+        createdAt: serverTimestamp(),
+        isOnline: "true",
+      });
+      await setDoc(doc(db, "userChats", res.user.uid), {});
+
+      navigate("/");
     } catch (error) {
       console.error(error);
       reset();
