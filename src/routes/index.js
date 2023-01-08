@@ -9,6 +9,7 @@ import AuthLayout from "../components/layouts/auth";
 import { DEFAULT_PATH } from "../config";
 import LoadingScreen from "../components/LoadingScreen";
 import ProtectedRoute from "../components/ProtectedRoute";
+import NewPassword from "../pages/auth/NewPassword";
 
 const Loadable = (Component) => (props) => {
   return (
@@ -27,6 +28,7 @@ export default function Router() {
         { path: "login", element: <LoginPage /> },
         { path: "register", element: <RegisterPage /> },
         { path: "reset-password", element: <ResetPasswordPage /> },
+        { path: "new-password", element: <NewPasswordPage /> },
       ],
     },
     {
@@ -64,4 +66,7 @@ const LoginPage = Loadable(lazy(() => import("../pages/auth/Login")));
 const Settings = Loadable(lazy(() => import("../pages/dashboard/Settings")));
 const ResetPasswordPage = Loadable(
   lazy(() => import("../pages/auth/ResetPassword"))
+);
+const NewPasswordPage = Loadable(
+  lazy(() => import("../pages/auth/NewPassword"))
 );
